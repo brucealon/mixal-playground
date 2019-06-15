@@ -1,14 +1,43 @@
+***
 * the main program
+* TODO
+*  - After loading the entries from tape, count them
+*    from X until a 00000. Set COUNT to the prior index.
+*  - In the value, convert leading 30s to 0s, then shift
+*    the value over until there is only one leading 0.
+*  - In the index, convert leading 30s to 0s, then shift
+*    the index over until there is only one leading 0.
+***
 X           EQU     1000
+RES         EQU     2000
+* GNU MDK stores tapes at
+* ~/.mdk/tapeTAPE.dev
+TAPE        EQU     1
+TERM        EQU     19
+COUNT       EQU     100
+* constants for results display
+            ORIG    RES
+            ALF     VALUE
+            ORIG    RES+2
+            ALF     INDEX
+* begin
             ORIG    3000
-* in mdk the following line will read
-* ~/.mdk/tape0.dev
-START       IN      X(0)
-            JBUS    *(0)
-            ENT1    20
-            JMP     MAXIMUM
+START       IN      X(TAPE)      read the data
+            JBUS    *(TAPE)
+            ENT1    COUNT        set number of items
+            JMP     MAXIMUM      get the maximum
+* print the value and index
+            CHAR
+            STX     RES+1
+            ST2     RES+3       get the index of the results
+            LDA     RES+3
+            CHAR
+            STX     RES+3
+            OUT     RES(TERM)
             HLT
+***
 * the max subroutine
+***
 MAXIMUM     STJ     EXIT
 INIT        ENT3    0,1
             JMP     CHANGEM
