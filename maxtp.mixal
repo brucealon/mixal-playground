@@ -16,25 +16,41 @@ TAPE        EQU     1
 TERM        EQU     19
 COUNT       EQU     100
 * constants for results display
-            ORIG    RES
-            ALF     VALUE
-            ORIG    RES+2
-            ALF     INDEX
+            ORIG    RES+100
+VLABEL      ALF     VALUE
+ILABEL      ALF     INDEX
 * begin
             ORIG    3000
 START       IN      X(TAPE)      read the data
             JBUS    *(TAPE)
             ENT1    COUNT        set number of items
             JMP     MAXIMUM      get the maximum
-* print the value and index
-            CHAR
-            STX     RES+1
-            ST2     RES+3       get the index of the results
-            LDA     RES+3
-            CHAR
-            STX     RES+3
-            OUT     RES(TERM)
+* print the value
+            ENT1    RES          print from RES
+            MOVE    VLABEL       set the label
+            ENT6    0
+            JMP     OUTPUT
+* print the index
+            ENT1    RES
+            MOVE    ILABEL
+            ST2     RES+1        get the index of the results
+            LDA     RES+1
+            ENT6    0
+            JMP     OUTPUT
             HLT
+***
+* the output subroutine
+* r6 indexes from RES, usually 0
+* rA contains a number to print (converted by CHAR)
+* so RES,6 should have the label
+*    RES+1,6 should end up with the number
+***
+OUTPUT      STJ     1F
+            CHAR
+            STX     RES+1,6
+            OUT     RES,6(TERM)
+            IOC     0(TERM)
+1H          JMP     *
 ***
 * the max subroutine
 ***
