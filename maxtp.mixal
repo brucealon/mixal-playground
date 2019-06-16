@@ -7,13 +7,11 @@ RES         EQU     2000
 * ~/.mdk/tapeTAPE.dev
 TAPE        EQU     1
 TERM        EQU     19
-COUNT       EQU     100
 * constants for results display
             ORIG    RES+100
 VLABEL      ALF     VALUE
 ILABEL      ALF     INDEX
 ZEROES      ALF     00000
-SPACE       ALF          
 * begin
             ORIG    3000
 START       IN      X(TAPE)      read the data
