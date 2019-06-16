@@ -3,10 +3,6 @@
 * TODO
 *  - After loading the entries from tape, count them
 *    from X until a 00000. Set COUNT to the prior index.
-*  - In the value, convert leading 30s to 0s, then shift
-*    the value over until there is only one leading 0.
-*  - In the index, convert leading 30s to 0s, then shift
-*    the index over until there is only one leading 0.
 ***
 X           EQU     1000
 RES         EQU     2000
@@ -19,6 +15,8 @@ COUNT       EQU     100
             ORIG    RES+100
 VLABEL      ALF     VALUE
 ILABEL      ALF     INDEX
+ZEROES      ALF     00000
+SPACE       ALF          
 * begin
             ORIG    3000
 START       IN      X(TAPE)      read the data
@@ -28,27 +26,54 @@ START       IN      X(TAPE)      read the data
 * print the value
             ENT1    RES          print from RES
             MOVE    VLABEL       set the label
-            ENT6    0
             JMP     OUTPUT
 * print the index
             ENT1    RES
             MOVE    ILABEL
+* TO KNOW: is there a way to transfer directly from
+* r2 to rA, or does it always have to go through a
+* memory address?
             ST2     RES+1        get the index of the results
             LDA     RES+1
-            ENT6    0
             JMP     OUTPUT
             HLT
 ***
 * the output subroutine
-* r6 indexes from RES, usually 0
 * rA contains a number to print (converted by CHAR)
-* so RES,6 should have the label
-*    RES+1,6 should end up with the number
 ***
 OUTPUT      STJ     1F
             CHAR
-            STX     RES+1,6
-            OUT     RES,6(TERM)
+* there are only maximum five characters, so move
+* them over to rA to use shift operations to change
+* leading 30 (character 0) to 0 (character space).
+            STX     RES+1
+            LDA     RES+1
+            CMPA    ZEROES(1:1)
+            JNE     2F
+* TO KNOW: is there a way to set A(x:x) to 0 directly?
+* LDA wants to transfer in from a memory address and I
+* think always slides in from the left, so trying to
+* set just (5:5) will clear out (1:4).
+            SLA     1
+            SRA     1
+            CMPA    ZEROES(2:2)
+            JNE     2F
+            SLA     2
+            SRA     2
+            CMPA    ZEROES(3:3)
+            JNE     2F
+            SLA     3
+            SRA     3
+            CMPA    ZEROES(4:4)
+            JNE     2F
+            SLA     4
+            SRA     4
+            CMPA    ZEROES(5:5)
+            JNE     2F
+            SLA     5
+            SRA     5
+2H          STA     RES+1
+            OUT     RES(TERM)
             IOC     0(TERM)
 1H          JMP     *
 ***
