@@ -1,8 +1,5 @@
 ***
 * the main program
-* TODO
-*  - After loading the entries from tape, count them
-*    from X until a 00000. Set COUNT to the prior index.
 ***
 X           EQU     1000
 RES         EQU     2000
