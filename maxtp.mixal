@@ -21,7 +21,7 @@ SPACE       ALF
             ORIG    3000
 START       IN      X(TAPE)      read the data
             JBUS    *(TAPE)
-            ENT1    COUNT        set number of items
+            JMP     COUNTER
             JMP     MAXIMUM      get the maximum
 * print the value
             ENT1    RES          print from RES
@@ -37,6 +37,21 @@ START       IN      X(TAPE)      read the data
             LDA     RES+1
             JMP     OUTPUT
             HLT
+***
+* the counter subroutine
+* set r1 to the index of the last non-zero value
+***
+COUNTER     STJ     2F
+* make sure RES is zero
+            ENT1    0
+            ST1     RES
+            ENT1    1
+1H          LDA     X,1
+            CMPA    RES
+            JE      2F
+            INC1    1
+            JMP     1B
+2H          JMP     *
 ***
 * the output subroutine
 * rA contains a number to print (converted by CHAR)
