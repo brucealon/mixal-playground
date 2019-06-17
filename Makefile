@@ -12,5 +12,5 @@ max:
 	mixasm maxout
 	mixvm -r maxout
 	rm -f maxout.mixal maxout.mix
-	mixasm maxtp
-	mixvm -r maxtp
+	mixasm max
+	mixvm -r max
