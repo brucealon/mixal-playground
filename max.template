@@ -1,0 +1,9 @@
+* the main program
+X           EQU     1000
+TAPE        EQU     0
+            ORIG    3000
+* BEGIN
+* END
+            OUT     X(TAPE)
+            HLT
+            END     START
