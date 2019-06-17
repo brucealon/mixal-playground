@@ -6,7 +6,7 @@ hello:
 clean:
 	rm -f *.mix
 
-tape:
+max:
 	rm -f ~/.mdk/tape0.dev
 	./populate.rb >maxout.mixal
 	mixasm maxout
