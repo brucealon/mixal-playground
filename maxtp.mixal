@@ -5,7 +5,7 @@ X           EQU     1000
 RES         EQU     2000
 * GNU MDK stores tapes at
 * ~/.mdk/tapeTAPE.dev
-TAPE        EQU     1
+TAPE        EQU     0
 TERM        EQU     19
 * constants for results display
             ORIG    RES+100
