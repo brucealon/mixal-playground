@@ -1,5 +1,9 @@
 ***
 * the main program
+* the MAXIMUM subroutine is taken from The Art of Computer
+* Programming, Volume 1, Third Edition, page 145. The rest
+* of this program is my additions to experiment with and
+* learn MIX/MIXAL.
 ***
 X           EQU     1000
 RES         EQU     2000
