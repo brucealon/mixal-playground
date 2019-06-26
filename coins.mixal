@@ -1,7 +1,6 @@
-* number of ways to change A using N coins
-*   change A using all but first kind of coin
-*   change A-N1 using all kinds of coin
-* coins = 50 25 10 5 1
+* An example from Structure and Interpretation of Computer Programs,
+* section 1.2.2, pages 40-41. Find the number of ways to change money
+* amount A using N kinds of coins.
         ORIG      1000
 COINS   NOP
         CON       1
@@ -33,12 +32,12 @@ MAIN    J2Z       FINISH
         JANZ      1F
         INCX      1          * A == 0, increment X
         JMP       MAIN
-* push A - first coin, 2
+* push (A - first coin, all kinds of coins)
 1H      SUB       COINS,1
         STA       STACK,2
         ST1       STACK+1,2
         INC2      2
-* push A, all but first coin
+* push (A, all but first coin)
         ADD       COINS,1
         STA       STACK,2
         DEC1      1
