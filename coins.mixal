@@ -1,3 +1,49 @@
-* number of ways to change a using n coins
-*   change a using all but first kind of coin
-*   change a-(head n) using all kinds of coin
+* number of ways to change A using N coins
+*   change A using all but first kind of coin
+*   change A-N1 using all kinds of coin
+* coins = 50 25 10 5 1
+        ORIG      1000
+COINS   NOP
+        CON       1
+        CON       5
+        CON       10
+        CON       25
+        CON       50
+        ORIG      2000
+STACK   NOP
+        ORIG      3000
+* initial values
+* rA has the money amount
+* rX has the number of ways to make change
+* r1 has the number of kinds of coins
+* r2 will hold the stack pointer
+START   ENT1      5
+        ENTA      100
+        ENTX      0
+        ENT2      0
+        STA       STACK,2    * push rA
+        ST1       STACK+1,2  * push r1
+        INC2      2          * inc stack pointer
+MAIN    J2Z       FINISH
+        DEC2      2          * dec stack pointer
+        LDA       STACK,2    * pop rA
+        LD1       STACK+1,2  * pop r1
+        JAN       MAIN       * money < 0
+        J1NP      MAIN       * no more kinds of coins
+        JANZ      1F
+        INCX      1          * A == 0, increment X
+        JMP       MAIN
+* push A - first coin, 2
+1H      SUB       COINS,1
+        STA       STACK,2
+        ST1       STACK+1,2
+        INC2      2
+* push A, all but first coin
+        ADD       COINS,1
+        STA       STACK,2
+        DEC1      1
+        ST1       STACK+1,2
+        INC2      2
+        JMP       MAIN
+FINISH  HLT
+        END       START
