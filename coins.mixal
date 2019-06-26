@@ -3,46 +3,46 @@
 * amount A using N kinds of coins.
         ORIG      1000
 COINS   NOP
-        CON       1
-        CON       5
-        CON       10
-        CON       25
-        CON       50
+        CON       1           * pennies
+        CON       5           * nickels
+        CON       10          * dimes
+        CON       25          * quarters
+        CON       50          * half dollars
         ORIG      2000
 STACK   NOP
-        ORIG      3000
+        ORIG      3500
 * initial values
 * rA has the money amount
 * rX has the number of ways to make change
 * r1 has the number of kinds of coins
 * r2 will hold the stack pointer
-START   ENT1      5
-        ENTA      100
-        ENTX      0
-        ENT2      0
+START   ENT1      5          * start with five kinds of coins
+        ENTA      100        * make change for this amount
+        ENTX      0          * ensure X is 0
+        ENT2      0          * clear the stack pointer
         STA       STACK,2    * push rA
         ST1       STACK+1,2  * push r1
         INC2      2          * inc stack pointer
-MAIN    J2Z       FINISH
+MAIN    J2Z       FINISH     * we're done if the stack is empty
         DEC2      2          * dec stack pointer
         LDA       STACK,2    * pop rA
         LD1       STACK+1,2  * pop r1
         JAN       MAIN       * money < 0
         J1NP      MAIN       * no more kinds of coins
-        JANZ      1F
+        JAP       *+3        * if A is positive, more work to do
         INCX      1          * A == 0, increment X
-        JMP       MAIN
+        JMP       MAIN       * loop again
 * push (A - first coin, all kinds of coins)
-1H      SUB       COINS,1
-        STA       STACK,2
-        ST1       STACK+1,2
-        INC2      2
+        SUB       COINS,1    * subtract the first kind of coin
+        STA       STACK,2    * add A to the stack
+        ST1       STACK+1,2  * add kinds of coins to the stack
+        INC2      2          * bump the stack pointer
 * push (A, all but first coin)
-        ADD       COINS,1
-        STA       STACK,2
-        DEC1      1
-        ST1       STACK+1,2
-        INC2      2
-        JMP       MAIN
+        ADD       COINS,1    * restore A
+        STA       STACK,2    * add A to the stack
+        DEC1      1          * reduce the kinds of coins
+        ST1       STACK+1,2  * add kinds of coins to the stack
+        INC2      2          * bump the stack pointer
+        JMP       MAIN       * loop again
 FINISH  HLT
         END       START
